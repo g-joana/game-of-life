@@ -2,8 +2,39 @@
 #include <stdio.h>
 #include <unistd.h>
 
-int lives(int left, int up, int right, int down) {
+
+void draw(int *world, int width, int height) {
     
+    int x = 0;
+    int y = 0;
+    int lock = 1;
+    int c;
+
+    while (read(0, &c, 1) > 0) {
+
+        if (c == 'w')
+            y--;
+        else if (c == 'a')
+            x--;
+        else if (c == 's')
+            y++;
+        else if (c == 'd')
+            x++;
+        else if (c == 'x')
+            lock = 0;
+        
+        if (x < 0 || x >= width || y < 0 || y >= height)
+            break;
+        
+        if (!lock)
+            world[y * width + x] = 1;
+    }
+}
+
+
+int lives(int w, int a, int s, int d) {
+    if ((w + a + s + d) >= 3)
+        return 0;
 }
 
 int main (int argc, char **argv) {
@@ -16,49 +47,20 @@ int main (int argc, char **argv) {
     int size = width * height;
     int iterations = atoi(argv[3]);
 
-    int *world;
-    world = malloc(sizeof(int) * size);
-    int lock_pen = 0;
-
+    int world[size];
     for (int i = 0; i < size; i++) {
         world[i] = 0;
-        printf("%i\n", i);
+       // printf("%i", i);
     }
 
-    int lock = 0;
-    int x = 0;
-    int y = 0;
+    draw(world, width, height);
 
-    char c;
-    while (read(0, &c, 1) > 0) {
-        if (c == 'a') {
-            x++;
-        }
-        else if (c == 'd') {
-            x++;
-        }
-        else if (c == 's') {
-            y++;
-        }
-        else if (c == 'w') {
-            y--;
-        }
-        else if (c == 'x') {
-            lock = false;
-        }
-        if (!lock)
-            world[x*y] = 1;
-
-        if ((y >= height) || (x >= width))
-            break; 
+    for (int i = 0; i < size; i++) {
+        if (world[i] == 1)
+            printf("o");
+        else if (world[i] == 0)
+            printf(" ");
+        if((i + 1) % width == 0)
+            printf("\n");
     }
-
-    while (i < size) {
-
-        world[i] = 0;
-        printf("%i\n", i);
-    }
-
-
-
 }
