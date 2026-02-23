@@ -2,65 +2,59 @@
 #include <stdio.h>
 #include <unistd.h>
 
+void print(int *world, int width, int height) {
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            if (world[y * width + x])
+                putchar('O');
+            else
+                putchar(' ');
+        }
+        putchar('\n');
+    }
+}
 
 void draw(int *world, int width, int height) {
-    
-    int x = 0;
-    int y = 0;
-    int lock = 1;
-    int c;
+    int x = 0, y = 0, drawing = 0;
+    char c;
 
     while (read(0, &c, 1) > 0) {
+        if (c == 'w' && y > 0) y--;
+        else if (c == 's' && y < height - 1) y++;
+        else if (c == 'a' && x > 0) x--;
+        else if (c == 'd' && x < width - 1) x++;
+        else if (c == 'x') drawing = !drawing;
 
-        if (c == 'w')
-            y--;
-        else if (c == 'a')
-            x--;
-        else if (c == 's')
-            y++;
-        else if (c == 'd')
-            x++;
-        else if (c == 'x')
-            lock = 0;
-        
-        if (x < 0 || x >= width || y < 0 || y >= height)
-            break;
-        
-        if (!lock)
+        if (drawing)
             world[y * width + x] = 1;
     }
 }
 
-
 int lives(int w, int a, int s, int d) {
+
     if ((w + a + s + d) >= 3)
         return 0;
+
+    return 1;
 }
 
-int main (int argc, char **argv) {
+int main(int argc, char **argv) {
+    if (argc != 4) return 0;
 
-    if (!(argv[1] && argv[2] && argv[3]) || (argc > 4))
-        return 0;
     int width = atoi(argv[1]);
     int height = atoi(argv[2]);
-
+  //  int iterations = atoi(argv[3]);
     int size = width * height;
-    int iterations = atoi(argv[3]);
 
-    int world[size];
-    for (int i = 0; i < size; i++) {
-        world[i] = 0;
-       // printf("%i", i);
-    }
+    
+    int *world = calloc(size, sizeof(int));
+    if (!world) return 1;
 
     draw(world, width, height);
 
-    for (int i = 0; i < size; i++) {
-        if (world[i] == 1)
-            printf("o");
-        else if (world[i] == 0)
-            printf(" ");
-        if((i + 1) % width == 0)
-            printf("\n");
-    }
+    // iterar
+    
+    print(world, width, height);
+    free(world);
+    return 0;
 }
