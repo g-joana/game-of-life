@@ -3,26 +3,32 @@
 #include <unistd.h>
 
 void print(int *world, int width, int height) {
+
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
+
             if (world[y * width + x])
                 putchar('O');
             else
                 putchar(' ');
+
         }
         putchar('\n');
     }
 }
 
 void draw(int *world, int width, int height) {
+
     int x = 0, y = 0, drawing = 0;
     char c;
 
     while (read(0, &c, 1) > 0) {
+
         if (c == 'w' && y > 0) y--;
         else if (c == 's' && y < height - 1) y++;
         else if (c == 'a' && x > 0) x--;
         else if (c == 'd' && x < width - 1) x++;
+
         else if (c == 'x') drawing = !drawing;
 
         if (drawing)
@@ -31,11 +37,12 @@ void draw(int *world, int width, int height) {
 }
 
 int count_neighbors(int *world, int x, int y, int width, int height) {
+    
     int count = 0;
-
 
     for (int i = -1; i <= 1; i++) {
         for (int j = -1; j <= 1; j++) {
+
             if (i == 0 && j == 0) continue;
 
             int ny = y + i;
@@ -61,6 +68,7 @@ int lives(int cell, int population) {
 }
 
 int main(int argc, char **argv) {
+
     if (argc != 4) return 1;
 
     int width = atoi(argv[1]);
@@ -76,13 +84,16 @@ int main(int argc, char **argv) {
 
 
     for (int i = 0; i < iterations; i++) {
+
         int *next_gen = calloc(size, sizeof(int));
         if (!next_gen) return 1;
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
+
                 int neighbors = count_neighbors(world, x, y, width, height);
                 next_gen[y * width + x] = lives(world[y * width + x], neighbors);
+
             }
         }
 
