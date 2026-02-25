@@ -1,4 +1,8 @@
 ```
+echo 'sdxddssaaww' | ./living 5 5 0
+```
+or
+```
 echo 'sdxddssaaww' | ./life 5 5 0 | cat -e
 ```
 ```
