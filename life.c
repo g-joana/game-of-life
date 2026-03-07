@@ -25,9 +25,9 @@ void draw(int *world, int width, int height) {
     while (read(0, &c, 1) > 0) {
 
         if (c == 'w' && y > 0) y--;
-        else if (c == 's' && y < height - 1) y++;
-        else if (c == 'a' && x > 0) x--;
-        else if (c == 'd' && x < width - 1) x++;
+        if (c == 'a' && x > 0) x--;
+        if (c == 's' && y < height - 1) y++;
+        if (c == 'd' && x < width - 1) x++;
 
         else if (c == 'x') drawing = !drawing;
 
