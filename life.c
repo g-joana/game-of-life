@@ -48,10 +48,10 @@ int count_neighbors(int *world, int x, int y, int width, int height) {
             int ny = y + i;
             int nx = x + j;
 
-            if (ny >= 0 && ny < height && nx >= 0 && nx < width) {
-                if (world[ny * width + nx])
-                    count++;
-            }
+            if (ny < 0 || nx < 0) continue;
+            if (ny >= hei || nx >= wid) continue;
+            
+            if (world[ny * width + nx]) count++;
         }
     }
     return count;
